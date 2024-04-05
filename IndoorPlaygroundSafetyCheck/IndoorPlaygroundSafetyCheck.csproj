@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Background\caution.png" />
+    <None Remove="Images\Background\gameparadisecorner.png" />
+    <None Remove="Images\Background\Login.png" />
+    <None Remove="Images\Background\ready to use.png" />
+    <None Remove="Images\Background\Red-Warning-PNG-Clipart.png" />
+    <None Remove="Images\Icons\user.png" />
+    <None Remove="Images\Training\CommonError\Trampoline_CommonError.jpg" />
+    <None Remove="Images\Training\CorrectSetup\Trampolin_CorrectSetup.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AForge.Video" Version="2.2.5" />
+    <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.2.24128.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-preview.2.24128.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-preview.2.24128.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="QRCoder" Version="1.4.3" />
+    <PackageReference Include="ZXing.Net" Version="0.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Background\caution.png" />
+    <Resource Include="Images\Background\gameparadisecorner.png" />
+    <Resource Include="Images\Background\Login.png" />
+    <Resource Include="Images\Background\ready to use.png" />
+    <Resource Include="Images\Background\Red-Warning-PNG-Clipart.png" />
+    <Resource Include="Images\Icons\user.png" />
+    <Resource Include="Images\Training\CommonError\Trampoline_CommonError.jpg" />
+    <Resource Include="Images\Training\CorrectSetup\Trampolin_CorrectSetup.jpg" />
+  </ItemGroup>
+
+</Project>

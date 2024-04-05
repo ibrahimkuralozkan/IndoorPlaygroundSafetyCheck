@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="IndoorPlaygroundSafetyCheck.Views.Statistics"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:IndoorPlaygroundSafetyCheck.Converters"
+             xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
+             mc:Ignorable="d" Height="450" Width="800">
+    <UserControl.DataContext>
+        <vm:StatisticsViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <converters:ErrorTypeConverter x:Key="ErrorTypeConverter"/>
+        <converters:ErrorTypeToColorConverter x:Key="ErrorTypeToColorConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+           
+
+            <!-- Error Type Counts -->
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <TextBlock Text="Stations by Error Type" FontWeight="Bold" Margin="0,0,0,5"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Ready To Use: " FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ErrorTypeZeroCount}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Warnings: " FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ErrorTypeOneCount}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Errors: " FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ErrorTypeTwoCount}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Unchecked: " FontWeight="Bold"/>
+                    <TextBlock Text="{Binding UncheckedStationsCount}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Today's Statistics -->
+            <StackPanel Grid.Row="1" Orientation="Vertical">
+                <TextBlock Text="Today's Statistics" FontWeight="Bold" Margin="0,20,0,5"/>
+                <ListView ItemsSource="{Binding StationsErrorTypeZero}" Background="LightGreen" MinHeight="50" Margin="0,0,0,10">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Ready To Use Stations" DisplayMemberBinding="{Binding}" Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView ItemsSource="{Binding StationsErrorTypeOne}" Background="Yellow" MinHeight="50" Margin="0,0,0,10">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Warnings" DisplayMemberBinding="{Binding}" Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView ItemsSource="{Binding StationsErrorTypeTwo}" Background="LightCoral" MinHeight="50" Margin="0,0,0,10">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Errors" DisplayMemberBinding="{Binding}" Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView ItemsSource="{Binding UncheckedStations}" Background="LightGray" MinHeight="50" Margin="0,0,0,10">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Unchecked Stations" DisplayMemberBinding="{Binding}" Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Vertical">
+                <ListView Height="200" ItemsSource="{Binding Results}">
+            <ListView.View>
+                <GridView>
+
+
+                            <GridViewColumn Header="Station Name" DisplayMemberBinding="{Binding StationName}" Width="200"/>
+
+                            <GridViewColumn Header="Question Text" DisplayMemberBinding="{Binding QuestionText}" Width="200"/>
+                            <GridViewColumn Header="Error Type" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ErrorType, Converter={StaticResource ErrorTypeConverter}}"
+                       Background="{Binding ErrorType, Converter={StaticResource ErrorTypeToColorConverter}}"/>
+                                    </DataTemplate>
+                                   
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn Header="Notes" DisplayMemberBinding="{Binding Notes}" Width="150"/>
+                           
+                            <GridViewColumn Header="Inserted By" DisplayMemberBinding="{Binding InsertedBy}" Width="100"/>
+                            <GridViewColumn Header="Insert TimeStamp" DisplayMemberBinding="{Binding InsertTimeStamp}" Width="150"/>
+                   
+                    <!--<GridViewColumn Header="Updated By" DisplayMemberBinding="{Binding UpdatedBy}" Width="100"/>-->
+                    <!--<GridViewColumn Header="Update TimeStamp" DisplayMemberBinding="{Binding UpdateTimeStamp}" Width="150"/>-->
+                   
+                </GridView>
+            </ListView.View>
+        </ListView>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

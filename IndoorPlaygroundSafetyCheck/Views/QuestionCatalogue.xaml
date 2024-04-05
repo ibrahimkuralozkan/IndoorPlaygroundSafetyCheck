@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="IndoorPlaygroundSafetyCheck.Views.QuestionCatalogueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
+             Width="800" Height="600">
+
+    <Grid >
+        <StackPanel Margin="20">
+            <TextBox x:Name="DescriptionTextBox" Margin="0 0 0 10" Background="#FFFFFF" BorderBrush="#BDBDBD" BorderThickness="1" Padding="5">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <VisualBrush>
+                                            <VisualBrush.Visual>
+                                                <TextBlock Text="Enter Station Name" FontStyle="Italic" Foreground="#BDBDBD" Margin="5,0,0,0"/>
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <Button Content="Add Station" Margin="0 0 0 10" Background="#4CAF50" Foreground="White" Padding="10" Click="SaveButton_Click"/>
+
+            <ListBox Height="200" ItemsSource="{Binding QuestionCatalogues}" DisplayMemberPath="Description" SelectedItem="{Binding SelectedQuestionCatalogue}" Background="#FFFFFF" BorderBrush="#BDBDBD" BorderThickness="1" Padding="5" Margin="0 0 0 10"/>
+            <Button Content="Delete Selected" Margin="0 0 0 10" Background="#F44336" Foreground="White" Padding="10" Click="DeleteButton_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

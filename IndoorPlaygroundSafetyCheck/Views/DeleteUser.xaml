@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="IndoorPlaygroundSafetyCheck.Views.DeleteUser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
+             Cursor="Hand"  Width="800" Height="600">
+    <UserControl.DataContext>
+        <vm:DeleteUserViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Delete User" FontWeight="Bold" FontSize="32" Margin="0,0,0,30" HorizontalAlignment="Center" Foreground="#2196F3"/>
+
+        <!-- User Selection -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,30">
+            <TextBlock Text="Select a User:" FontWeight="Bold" FontSize="20" Margin="0,0,0,10"/>
+            <!-- ListBox for selecting an employee -->
+            <ListBox ItemsSource="{Binding Employees}" DisplayMemberPath="FullName" SelectedItem="{Binding SelectedEmployee}" Height="150" Margin="0,5"/>
+
+            <!-- Selected User -->
+            <TextBlock Text="Selected User:" FontWeight="Bold" FontSize="20" Margin="0,20,0,10"/>
+            <!-- TextBlock to display the selected employee's full name -->
+            <TextBlock Text="{Binding SelectedEmployee.FullName}" Margin="0,5"/>
+
+            <!-- Delete button -->
+            <Button Content="Delete User" Command="{Binding DeleteUserCommand}" Width="200" Height="50" Margin="0,30,0,0" HorizontalAlignment="Center" FontSize="20" Background="#4CAF50" Foreground="White" BorderBrush="#4CAF50"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

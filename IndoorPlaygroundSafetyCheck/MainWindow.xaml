@@ -1,0 +1,86 @@
+﻿<Window x:Class="IndoorPlaygroundSafetyCheck.MainWindow"
+        xmlns:local="clr-namespace:IndoorPlaygroundSafetyCheck.Views"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Indoor Playground SafetyCheck" WindowState="Maximized">
+    <Window.Resources>
+        <!-- Base Button Style with Modern Effects -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="10, 5, 10, 5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="5" Direction="270" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Enhanced TextBlock Style -->
+        <Style x:Key="FullNameTextBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,20,0,10"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Background="#EEE">
+            <Image Width="50" Height="50" Margin="10,20,0,10" Source="pack://application:,,,/Images/Icons/user.png"/>
+            <TextBlock x:Name="textBlockFullName" Style="{StaticResource FullNameTextBlock}"/>
+            <Button x:Name="btn_DailyInspection" Content="Daily Inspection" Style="{StaticResource ModernButton}" Click="DailyInspection_Click"/>
+            <Button x:Name="btn_AfterInspection" Content="After Repairment Inspection" Style="{StaticResource ModernButton}" Click="AfterRepairInspection_Click"/>
+            <Button x:Name="btn_AddStation" Content="Add Station (Admin)" Style="{StaticResource ModernButton}" Click="AddStation_Click"/>
+            <Button x:Name="btn_InspectionQuestion" Content="Question Catalogue (Admin)" Style="{StaticResource ModernButton}" Click="InspectionQuestions_Click"/>
+            <Button x:Name="btn_Question" Content="Question (Admin)" Style="{StaticResource ModernButton}" Click="Questions_Click"/>
+            <Button x:Name="btn_DeleteStation" Content="Delete Station (Admin)" Style="{StaticResource ModernButton}" Click="DeleteStation_Click"/>
+            <Button x:Name="btn_AddUser" Content="Add User (Admin)" Style="{StaticResource ModernButton}" Click="AddUser_Click"/>
+            <Button x:Name="btn_DeleteUser" Content="Delete User (Admin)" Style="{StaticResource ModernButton}" Click="DeleteUser_Click"/>
+            <Button x:Name="btn_Statistics" Content="Statistics" Style="{StaticResource ModernButton}" Click="Statistics_Click"/>
+            <Button x:Name="btn_Training" Content="Training" Style="{StaticResource ModernButton}" Click="Training_Click"/>
+        </StackPanel>
+
+        <ContentControl x:Name="MainContentArea" Grid.Column="1" Grid.Row="0">
+            <!-- Your content goes here -->
+        </ContentControl>
+
+        <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" CornerRadius="20" Background="Gray" Margin="0,20,0,50">
+            <TextBlock x:Name="StatusTimeText" Text="{Binding CurrentDateTime}" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,10" />
+        </Border>
+    </Grid>
+</Window>
