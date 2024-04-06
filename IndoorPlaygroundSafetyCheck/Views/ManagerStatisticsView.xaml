@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             mc:Ignorable="d">
+    <Grid Margin="0,40,0,0">
         <Grid.RowDefinitions>
+            <RowDefinition  Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Top" Margin="5">
+        <!--<TextBlock  Grid.Row="0" Style="{StaticResource PageHeaderTextStyle}" Text="Inspektion" FontWeight="Bold" Margin="10"/>-->
+        <TextBlock Height="50" Style="{StaticResource PageHeaderTextStyle}" Text="Statistik" FontWeight="Bold" Margin="0,0,190,20"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" Margin="10,10,10,0">
             <DatePicker x:Name="StartDatePicker" Margin="5" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
             <DatePicker x:Name="EndDatePicker" Margin="5" SelectedDate="{Binding EndDate, Mode=TwoWay}" />
             <ComboBox Width="120" Margin="5"
@@ -29,7 +31,7 @@
 
 
         </StackPanel>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding InspectionQuestionResults}" SelectedItem="{Binding SelectedInspectionQuestionResult, Mode=TwoWay}" Grid.Row="1">
+        <DataGrid Margin="10,10,20,0" AutoGenerateColumns="False" ItemsSource="{Binding InspectionQuestionResults}" SelectedItem="{Binding SelectedInspectionQuestionResult, Mode=TwoWay}" Grid.Row="2">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Station Ident" Binding="{Binding StationIdent}" />

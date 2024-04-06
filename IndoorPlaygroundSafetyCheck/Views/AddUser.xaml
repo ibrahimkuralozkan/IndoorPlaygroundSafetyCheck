@@ -1,66 +1,71 @@
 ﻿<UserControl x:Class="IndoorPlaygroundSafetyCheck.Views.AddUser"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  Width="800" Height="600">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!-- User Input Fields Section -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="First Name:" FontWeight="Bold"/>
-            <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
-                     Margin="0,0,0,10" 
-                     BorderThickness="1" 
-                     BorderBrush="#CCCCCC" 
-                     Padding="5"/>
+            <Border Grid.Row="0" >
+                <TextBlock Margin="0,0,190,20" Height="50" Grid.Row="0" Style="{StaticResource PageHeaderTextStyle}" Text="Benutzer Hinzufügen" FontWeight="Bold" />
+            </Border>
+            <StackPanel Background="#f0f0f0" Grid.Row="1" >
+                <TextBlock Style="{StaticResource HeadingTextBlock}" Text="First Name:" FontWeight="Bold"/>
+                <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,10" 
+                         BorderThickness="1" 
+                         BorderBrush="#CCCCCC" 
+                         Padding="5"/>
 
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Last Name:" FontWeight="Bold"/>
-            <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
-                     Margin="0,0,0,10" 
-                     BorderThickness="1" 
-                     BorderBrush="#CCCCCC" 
-                     Padding="5"/>
+                <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Last Name:" FontWeight="Bold"/>
+                <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,10" 
+                         BorderThickness="1" 
+                         BorderBrush="#CCCCCC" 
+                         Padding="5"/>
 
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Position:" FontWeight="Bold"/>
-            <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" 
-                     Margin="0,0,0,10" 
-                     BorderThickness="1" 
-                     BorderBrush="#CCCCCC" 
-                     Padding="5"/>
+                <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Position:" FontWeight="Bold"/>
+                <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,10" 
+                         BorderThickness="1" 
+                         BorderBrush="#CCCCCC" 
+                         Padding="5"/>
 
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Rfid Card Number:" FontWeight="Bold"/>
-            <TextBox Text="{Binding RfidUid, UpdateSourceTrigger=PropertyChanged}" 
-                     Margin="0,0,0,10" 
-                     BorderThickness="1" 
-                     BorderBrush="#CCCCCC" 
-                     Padding="5"/>
+                <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Rfid Card Number:" FontWeight="Bold"/>
+                <TextBox Text="{Binding RfidUid, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,10" 
+                         BorderThickness="1" 
+                         BorderBrush="#CCCCCC" 
+                         Padding="5"/>
 
-            <Button Style="{StaticResource SmallButtonStyle }"
-                Content="Add User" 
-                    Command="{Binding AddUserCommand}" 
-                    Width="120" 
-                    Height="40" 
-                    Background="#4CAF50" 
-                    Foreground="White" 
-                    FontSize="16" 
-                    FontWeight="Bold" 
-                    BorderThickness="0" 
-                    Margin="5"
-                    Cursor="Hand"/>
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="User List:" FontWeight="Bold"/>
-        </StackPanel>
+                <Button Style="{StaticResource SmallButtonStyle }"
+                    Content="Add User" 
+                        Command="{Binding AddUserCommand}" 
+                        Width="120" 
+                        Height="40" 
+                        Background="#4CAF50" 
+                        Foreground="White" 
+                        FontSize="16" 
+                        FontWeight="Bold" 
+                        BorderThickness="0" 
+                        Margin="0,10,156,0"
+                        Cursor="Hand"/>
+                <TextBlock Style="{StaticResource HeadingTextBlock}" Text="User List:" FontWeight="Bold"/>
+            </StackPanel>
 
-        <!-- List of Users Section -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Employees}" Margin="0,10,0,0" Cursor="Hand">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="120"/>
-                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" Width="120"/>
-                    <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="120"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Grid>
+            <!-- List of Users Section -->
+            <ListView Height="200" Background="#f0f0f0" Grid.Row="2" ItemsSource="{Binding Employees}"  Cursor="Hand">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="120"/>
+                        <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" Width="120"/>
+                        <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="120"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

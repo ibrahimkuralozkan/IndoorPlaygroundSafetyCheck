@@ -4,50 +4,73 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             mc:Ignorable="d"
-             Height="450" Width="800">
+             mc:Ignorable="d" MaxHeight="600">
 
     <UserControl.DataContext>
         <local:TrainingViewModel/>
     </UserControl.DataContext>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <StackPanel Margin="10">
-                <TextBox x:Name="DescriptionTextBox" Width="400" Height="30" Margin="30" Foreground="Gray" Text="Description"
-                         GotFocus="DescriptionTextBox_GotFocus" LostFocus="DescriptionTextBox_LostFocus"/>
-                <ComboBox x:Name="StationComboBox" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}" Margin="0,0,0,10"/>
-                <Button Style="{StaticResource SmallButtonStyle}" Content="Upload Correct Setup Image" Margin="0,0,0,5" Click="UploadCorrectSetupImage_Click"/>
-                <Button Style="{StaticResource SmallButtonStyle}" Content="Upload Common Errors Image" Margin="0,0,0,5" Click="UploadCommonErrorsImage_Click"/>
-                <Button  Style="{StaticResource SmallButtonStyle}" Content="Upload Video" Margin="0,0,0,5" Click="UploadVideo_Click"/>
-                <Button Style="{StaticResource SmallButtonStyle}" Content="Save Training" Margin="0,0,0,10" Click="SaveTraining_Click"/>
+        <Border Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Height="50" Style="{StaticResource PageHeaderTextStyle}" Text="Lernverfahren" FontWeight="Bold"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <StackPanel Margin="20,0,150,20">
+                    <TextBlock Text="Explanation:" Style="{StaticResource HeadingTextBlock}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Provide details or instructions here." Margin="0,0,0,10"/>
+
+                    <TextBox x:Name="DescriptionTextBox" Width="800" Height="100" Margin="0,0,0,10" Foreground="Gray" Text="Type Detail of Training as Text."
+                             GotFocus="DescriptionTextBox_GotFocus" LostFocus="DescriptionTextBox_LostFocus"/>
+
+                    <TextBlock Text="Select Station" Style="{StaticResource HeadingTextBlock}" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="StationComboBox" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}" Margin="0,0,0,10"/>
+
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,20">
+                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Upload Correct Setup Image" Click="UploadCorrectSetupImage_Click"/>
+                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Upload Common Errors Image" Click="UploadCommonErrorsImage_Click"/>
+                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Upload Video" Click="UploadVideo_Click"/>
+                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Save Training" Click="SaveTraining_Click"/>
+                    </WrapPanel>
+                </StackPanel>
+
+                <ItemsControl Background="#f0f0f0" ItemsSource="{Binding Trainings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="1" BorderBrush="LightGray" Margin="0,0,0,10">
+                                <StackPanel Orientation="Vertical" Margin="10">
+                                    <TextBlock Text="Station Name:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding StationIdentNavigation.Name}" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="360" TextTrimming="CharacterEllipsis" Margin="0,0,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="Correct Setup:" FontWeight="Bold" Margin="0,0,10,0"/>
+                                        <Image Source="{Binding CorrectSetupImagePath}" Height="100" Tag="{Binding CorrectSetupImagePath}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+                                        <Popup Name="PopupCorrectSetup" Placement="Mouse" AllowsTransparency="True" PopupAnimation="Fade">
+                                            <Image Source="{Binding CorrectSetupImagePath}" Width="400"/>
+                                        </Popup>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="Common Error:" FontWeight="Bold" Margin="0,0,10,0"/>
+                                        <Image Source="{Binding CommonErrorsImagePath}" Height="100" Tag="{Binding CommonErrorsImagePath}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+                                        <Popup Name="PopupCommonErrors" Placement="Mouse" AllowsTransparency="True" PopupAnimation="Fade">
+                                            <Image Source="{Binding CommonErrorsImagePath}" Width="400"/>
+                                        </Popup>
+                                    </StackPanel>
+
+                                    <Button Style="{StaticResource SmallButtonStyle}" Content="Open Video" Command="{Binding DataContext.OpenVideoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding VideoPath}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
-
-            <ItemsControl ItemsSource="{Binding Trainings}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical" Margin="10">
-                            <TextBlock Text="{Binding StationIdentNavigation.Name}" Margin="0,0,0,5"/>
-                            <TextBlock Text="{Binding Description}"  FontWeight="Bold" TextWrapping="Wrap" MaxWidth="360" 
-                                       TextTrimming="CharacterEllipsis"/> 
-                           
-                            <!-- Correct Setup Image -->
-                            <Image Margin="20" Source="{Binding CorrectSetupImagePath}" Height="100" Tag="{Binding CorrectSetupImagePath}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                            <Popup Name="PopupCorrectSetup" Placement="Mouse" AllowsTransparency="True" PopupAnimation="Fade">
-                                <Image Source="{Binding CorrectSetupImagePath}" Width="400"/>
-                            </Popup>
-                            <!-- Common Errors Image -->
-                            <Image  Margin="20" Source="{Binding CommonErrorsImagePath}" Height="100" Tag="{Binding CommonErrorsImagePath}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                            <Popup Name="PopupCommonErrors" Placement="Mouse" AllowsTransparency="True" PopupAnimation="Fade">
-                                <Image Source="{Binding CommonErrorsImagePath}" Width="400"/>
-                            </Popup>
-                            <Button Style="{StaticResource SmallButtonStyle}" Content="Open Video" Command="{Binding DataContext.OpenVideoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding VideoPath}"/>
-                        </StackPanel>
-                    </DataTemplate>
-
-
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
