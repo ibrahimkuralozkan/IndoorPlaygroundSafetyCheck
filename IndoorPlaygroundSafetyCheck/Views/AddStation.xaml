@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             Background="#FFFFFF" Cursor="Hand" Width="800" Height="600">
+             Background="Transparent" Cursor="Hand" >
 
     <UserControl.Resources>
         <!-- Define shared styles -->
@@ -35,25 +35,27 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Station Name Section -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <TextBlock Height="50" Grid.Row="  0" Style="{StaticResource PageHeaderTextStyle}" Text="Station Hinzufügen" FontWeight="Bold" />
+        <Border Grid.Row="1" Background="#f0f0f0">
+        <StackPanel  Margin="0,0,0,20">
             <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Add Station Name:" FontWeight="Bold"/>
             <TextBox Text="{Binding StationName, UpdateSourceTrigger=PropertyChanged}" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
-            <Button   Style="{StaticResource SmallButtonStyle}" Content="Add Station" 
+            <Button   Background="#4CAF50" Style="{StaticResource SmallButtonStyle}" Content="Add Station" 
                     Command="{Binding AddStationCommand}" 
-                    Width="120" 
-                    Height="40"/>
+                    Width="200" />
+
             <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Station List:" FontWeight="Bold"/>
         </StackPanel>
-
+        </Border>
         <!-- List of Stations Section -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Stations}" Margin="0,0,0,0">
+        <ListView Background="#f0f0f0" Grid.Row="2" ItemsSource="{Binding Stations}" Margin="0,0,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" Margin="5"/>

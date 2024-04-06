@@ -3,67 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:IndoorPlaygroundSafetyCheck.Converters"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             Background="#FFFFFF" Cursor="Hand" Width="1000" Height="600">
+             Background="#FFFFFF" Cursor="Hand"  >
 
     <UserControl.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <converters:AnswerToYesNoConverter x:Key="AnswerToYesNoConverter"/>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style TargetType="RadioButton">
-            <Setter Property="Margin" Value="10,5"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="Background" Value="#4CAF50"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="#388E3C"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="10,5"/>
-            <Setter Property="Background" Value="#FFFFFF"/>
-            <Setter Property="BorderBrush" Value="#BDBDBD"/>
-            <Setter Property="Foreground" Value="#212121"/>
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style TargetType="Expander">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#BDBDBD"/>
-            <Setter Property="Foreground" Value="#212121"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="10"/>
-        </Style>
+      
     </UserControl.Resources>
 
     <UserControl.DataContext>
         <vm:DailyInspectionViewModel/>
     </UserControl.DataContext>
-
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid>
+
+        <Grid  Margin="10" >
+       
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <!-- Questions Section -->
-            <ScrollViewer Grid.Row="1" Margin="10">
+            <Border Grid.Row=" 0" Background="Transparent">
+                <TextBlock Height="50" Style="{StaticResource PageHeaderTextStyle}" Text="Inspektion" FontWeight="Bold" />
+            </Border>
+            <!-- Rest of your XAML code -->
+            <ScrollViewer Background="#f0f0f0" Grid.Row="1" >
+                
                 <ItemsControl ItemsSource="{Binding StationQuestions}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Expander Style="{StaticResource ModernExpanderStyle}" Header="{Binding StationName}" IsExpanded="True">
+
+                                
+                                <Expander FontSize="20"   Style="{StaticResource ModernExpanderStyle}" Header="{Binding StationName}" IsExpanded="True">
                                     <ItemsControl ItemsSource="{Binding StationQuestions}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="{Binding QuestionText}" TextWrapping="Wrap"/>
+                                                    <TextBlock  Style="{StaticResource HeadingTextBlock}" Text="{Binding QuestionText}" TextWrapping="Wrap"/>
                                                     <StackPanel Orientation="Horizontal">
                                                         <RadioButton Background="Green" Content="Ready To Use"
                                                                     IsChecked="{Binding Path=YesSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -71,7 +50,7 @@
                                                                     IsChecked="{Binding Path=NaSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         <RadioButton Background="Red" Content="Warning!!!"
                                                                     IsChecked="{Binding Path=NoSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <TextBox Style="{StaticResource ModernTextBoxStyle}" Width="300" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Margin="90,0,0,0" Style="{StaticResource ModernTextBoxStyle}" Width="800" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -83,23 +62,34 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+            
+          
+               
+            
 
-            <!-- Signature Section -->
-            <InkCanvas Grid.Row="2" x:Name="signatureCanvas" Margin="10" Height="100" Background="#E0E0E0"/>
+            <StackPanel Grid.Row="2"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center"  Style="{StaticResource ContentTextBlock}" FontSize="20"  FontWeight="Bold"  Text="Signature"></TextBlock>
+                <InkCanvas   Height="100" Grid.Row="2" x:Name="signatureCanvas" Margin="10"   Background="DarkGray" />
+                </StackPanel>
+                <DockPanel>
 
-            <!-- Buttons Section -->
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
-                <Button  Content="Inspektion starten" Style="{StaticResource SmallButtonStyle}"
-                        Command="{Binding StartDailyInspectionCommand}"
-                        IsEnabled="{Binding IsScanEnabled, Converter={StaticResource InverseBooleanConverter}}"/>
+                    <Button  Background="#4CAF50" Content="Inspektion starten" Style="{StaticResource SmallButtonStyle}"
+        Command="{Binding StartDailyInspectionCommand}"
+        IsEnabled="{Binding IsScanEnabled, Converter={StaticResource InverseBooleanConverter}}"/>
 
-                <Button Content="Senden" Click="SendButton_Click" Style="{StaticResource SmallButtonStyle}"
-                        IsEnabled="{Binding IsScanEnabled}"/>
+                    <Button Background="LightBlue"     Content="Senden" Click="SendButton_Click" Style="{StaticResource SmallButtonStyle}"
+        IsEnabled="{Binding IsScanEnabled}"/>
 
-                <Button Content="Signatur löschen" Click="ClearSignature_Click" Style="{StaticResource SmallButtonStyle}"
-                        IsEnabled="{Binding IsScanEnabled}"/>
-                <Button Background="Green" Style="{StaticResource SmallButtonStyle}" Content="Home" Click="HomeButton_Click"/>
+                    <Button  Content="Signatur löschen" Click="ClearSignature_Click" Style="{StaticResource SmallButtonStyle}"
+        IsEnabled="{Binding IsScanEnabled}"/>
+                    <Button Background="#4CAF50" Style="{StaticResource SmallButtonStyle}" Content="Home" Click="HomeButton_Click"/>
+
+                </DockPanel>
+                   
+            
             </StackPanel>
+          
         </Grid>
     </ScrollViewer>
 </UserControl>
