@@ -17,10 +17,10 @@
                 <TextBox x:Name="DescriptionTextBox" Width="400" Height="30" Margin="30" Foreground="Gray" Text="Description"
                          GotFocus="DescriptionTextBox_GotFocus" LostFocus="DescriptionTextBox_LostFocus"/>
                 <ComboBox x:Name="StationComboBox" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}" Margin="0,0,0,10"/>
-                <Button Content="Upload Correct Setup Image" Margin="0,0,0,5" Click="UploadCorrectSetupImage_Click"/>
-                <Button Content="Upload Common Errors Image" Margin="0,0,0,5" Click="UploadCommonErrorsImage_Click"/>
-                <Button Content="Upload Video" Margin="0,0,0,5" Click="UploadVideo_Click"/>
-                <Button Content="Save Training" Margin="0,0,0,10" Click="SaveTraining_Click"/>
+                <Button Style="{StaticResource SmallButtonStyle}" Content="Upload Correct Setup Image" Margin="0,0,0,5" Click="UploadCorrectSetupImage_Click"/>
+                <Button Style="{StaticResource SmallButtonStyle}" Content="Upload Common Errors Image" Margin="0,0,0,5" Click="UploadCommonErrorsImage_Click"/>
+                <Button  Style="{StaticResource SmallButtonStyle}" Content="Upload Video" Margin="0,0,0,5" Click="UploadVideo_Click"/>
+                <Button Style="{StaticResource SmallButtonStyle}" Content="Save Training" Margin="0,0,0,10" Click="SaveTraining_Click"/>
             </StackPanel>
 
             <ItemsControl ItemsSource="{Binding Trainings}">
@@ -41,7 +41,7 @@
                             <Popup Name="PopupCommonErrors" Placement="Mouse" AllowsTransparency="True" PopupAnimation="Fade">
                                 <Image Source="{Binding CommonErrorsImagePath}" Width="400"/>
                             </Popup>
-                            <Button Content="Open Video" Command="{Binding DataContext.OpenVideoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding VideoPath}"/>
+                            <Button Style="{StaticResource SmallButtonStyle}" Content="Open Video" Command="{Binding DataContext.OpenVideoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding VideoPath}"/>
                         </StackPanel>
                     </DataTemplate>
 

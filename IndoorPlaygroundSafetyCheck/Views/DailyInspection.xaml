@@ -3,13 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:IndoorPlaygroundSafetyCheck.Converters"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             Background="#FFFFFF" Cursor="Hand" Width="900" Height="600">
+             Background="#FFFFFF" Cursor="Hand" Width="1000" Height="600">
 
     <UserControl.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <converters:AnswerToYesNoConverter x:Key="AnswerToYesNoConverter"/>
-
-        <!-- Shared styles -->
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontSize" Value="14"/>
@@ -21,7 +19,7 @@
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Width" Value="200"/>
             <Setter Property="Background" Value="#4CAF50"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="BorderBrush" Value="#388E3C"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -34,7 +32,7 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style TargetType="Expander">
-            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#BDBDBD"/>
             <Setter Property="Foreground" Value="#212121"/>
             <Setter Property="Margin" Value="5"/>
@@ -60,12 +58,12 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Expander Header="{Binding StationName}" IsExpanded="True">
+                                <Expander Style="{StaticResource ModernExpanderStyle}" Header="{Binding StationName}" IsExpanded="True">
                                     <ItemsControl ItemsSource="{Binding StationQuestions}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <TextBlock Text="{Binding QuestionText}" TextWrapping="Wrap"/>
+                                                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="{Binding QuestionText}" TextWrapping="Wrap"/>
                                                     <StackPanel Orientation="Horizontal">
                                                         <RadioButton Background="Green" Content="Ready To Use"
                                                                     IsChecked="{Binding Path=YesSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -73,7 +71,7 @@
                                                                     IsChecked="{Binding Path=NaSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         <RadioButton Background="Red" Content="Warning!!!"
                                                                     IsChecked="{Binding Path=NoSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <TextBox Width="300" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <TextBox Style="{StaticResource ModernTextBoxStyle}" Width="300" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </DataTemplate>
@@ -91,16 +89,16 @@
 
             <!-- Buttons Section -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
-                <Button  Content="Inspektion starten"
+                <Button  Content="Inspektion starten" Style="{StaticResource SmallButtonStyle}"
                         Command="{Binding StartDailyInspectionCommand}"
                         IsEnabled="{Binding IsScanEnabled, Converter={StaticResource InverseBooleanConverter}}"/>
 
-                <Button Content="Senden" Click="SendButton_Click"
+                <Button Content="Senden" Click="SendButton_Click" Style="{StaticResource SmallButtonStyle}"
                         IsEnabled="{Binding IsScanEnabled}"/>
 
-                <Button Content="Signatur löschen" Click="ClearSignature_Click"
+                <Button Content="Signatur löschen" Click="ClearSignature_Click" Style="{StaticResource SmallButtonStyle}"
                         IsEnabled="{Binding IsScanEnabled}"/>
-                <Button Content="Home" Click="HomeButton_Click"/>
+                <Button Background="Green" Style="{StaticResource SmallButtonStyle}" Content="Home" Click="HomeButton_Click"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>
