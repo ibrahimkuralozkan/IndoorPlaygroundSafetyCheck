@@ -3,11 +3,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
 using Microsoft.EntityFrameworkCore;
+using Windows;
 // Ensure System.Windows is added for MessageBox (used here for simplicity)
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
@@ -22,7 +24,51 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
         private DateTime _endDate = DateTime.Today;
         private InspectionQuestionResult _selectedInspectionQuestionResult;
         private readonly SafetyCheckContext _context;
+        private DateTime? _repairedTime;
+        private string _errorMessage;
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+      
+        public DateTime? RepairedTime
+        {
+            get => _repairedTime;
+            set
+            {
+                // Ensure there's a selected inspection question result to work with
+                if (SelectedInspectionQuestionResult == null)
+                {
+                    OnError("No inspection question result selected.");
+                    return;
+                }
 
+                // Now referencing RepairPlan from the selected item
+                if (value.HasValue && SelectedInspectionQuestionResult.RepairPlan.HasValue &&
+                    value.Value < SelectedInspectionQuestionResult.RepairPlan.Value)
+                {
+                    OnError("Repaired time cannot be before the Repair Plan.");
+                    return;
+                }
+
+                // If valid, update the property on the selected inspection question result
+                _repairedTime = value;
+                SelectedInspectionQuestionResult.RepairedTime = value; // Sync the ViewModel's property with the selected item
+                OnPropertyChanged(nameof(RepairedTime));
+            }
+        }
+        private void OnError(string message)
+        {
+            ErrorMessage = message;
+            // Trigger any additional error handling logic here
+        }
+
+       
         public int? SelectedErrorType
         {
             get => _selectedErrorType;
@@ -82,11 +128,18 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
             if (SelectedInspectionQuestionResult != null)
             {
                 _context.Update(SelectedInspectionQuestionResult);
-                _context.SaveChanges();
-                // MessageBox.Show("Repairment Plan updated successfully.");
-                // Consider using an event or a message service for MVVM compliance.
+                try
+                {
+                    _context.SaveChanges();
+                    MessageBox.Show("Changes updated successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to save changes: {ex.Message}");
+                }
             }
         }
+
 
         private void UpdateRepairPlan()
         {

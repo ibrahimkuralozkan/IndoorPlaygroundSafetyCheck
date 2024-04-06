@@ -21,8 +21,12 @@
             <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" Margin="5">
                 <Label Content="Repairment Plan Date:"/>
                 <DatePicker SelectedDate="{Binding SelectedInspectionQuestionResult.RepairPlan, Mode=TwoWay}" />
-                <Button Content="Save Repairment Plan" Command="{Binding SaveCommand}"/>
+                <Label Content="Repaired Time:"/>
+                <DatePicker SelectedDate="{Binding SelectedInspectionQuestionResult.RepairedTime, Mode=TwoWay}" />
+                <Button Content="Save Changes" Command="{Binding SaveCommand}"/>
             </StackPanel>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" />
+
 
         </StackPanel>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding InspectionQuestionResults}" SelectedItem="{Binding SelectedInspectionQuestionResult, Mode=TwoWay}" Grid.Row="1">
