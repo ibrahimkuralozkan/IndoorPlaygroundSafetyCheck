@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.ViewModels;
 
@@ -13,16 +14,22 @@ namespace IndoorPlaygroundSafetyCheck.Views
             var viewModel = new ManagerStatisticsViewModel(context);
             this.DataContext = viewModel;
         }
+        public ICommand LoadDataCommand { get; private set; }
 
-        private void LoadData_Click(object sender, RoutedEventArgs e)
+        public void LoadData_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as ManagerStatisticsViewModel;
-            if (viewModel != null)
+            if (!(DataContext is ManagerStatisticsViewModel viewModel))
             {
-                viewModel.StartDate = StartDatePicker.SelectedDate ?? DateTime.Today.AddDays(-7); // Use selected date or default
-                viewModel.EndDate = EndDatePicker.SelectedDate ?? DateTime.Today; // Use selected date or default
-                viewModel.LoadDataCommand.Execute(null);
+                MessageBox.Show("ViewModel is not set correctly.");
+                return;
             }
+
+            viewModel.StartDate = StartDatePicker.SelectedDate ?? DateTime.Today.AddDays(-7);
+            viewModel.EndDate = EndDatePicker.SelectedDate ?? DateTime.Today;
+
+            viewModel.LoadData(); // Directly call the LoadData method
         }
+
+
     }
 }

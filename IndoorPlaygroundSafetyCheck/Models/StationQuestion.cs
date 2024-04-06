@@ -20,11 +20,14 @@ namespace IndoorPlaygroundSafetyCheck.Models
         public string InsertedBy { get; set; } = string.Empty;
         public string UpdatedBy { get; set; } = string.Empty;
         public DateTime UpdateTimeStamp { get; set; }
-        public string QuestionText { get; set; } 
+        public string QuestionText { get; set; }
+        public DateTime? RepairedTime { get; set; }
 
-       
+        // Define RepairPlan property
+        public DateTime? RepairPlan { get; set; }
 
 
+        public int? ErrorType { get; set; }
 
         public virtual ICollection<InspectionQuestionResult> InspectionQuestionResults { get; set; } = new List<InspectionQuestionResult>();
         public virtual QuestionCatalogue QuestionCatalogueIdentNavigation { get; set; } = null!;

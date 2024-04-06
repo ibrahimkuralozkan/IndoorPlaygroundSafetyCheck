@@ -10,12 +10,12 @@ using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Enums;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
-using IndoorPlaygroundSafetyCheck.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Ink;
-using IndoorPlaygroundSafetyCheck.Views;
-using System.Windows.Media.Imaging;
 using RelayCommand = IndoorPlaygroundSafetyCheck.Commands.RelayCommand;
+using System.Windows.Media.Imaging;
+using Microsoft.IdentityModel.Tokens;
+
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
     public class DailyInspectionViewModel : INotifyPropertyChanged
@@ -34,11 +34,11 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 OnPropertyChanged(nameof(IsScanEnabled));
             }
         }
-        private readonly Data.SafetyCheckContext _context = new Data.SafetyCheckContext();
+
+        private readonly SafetyCheckContext _context = new SafetyCheckContext();
         private bool _isInspectionReadyToSend;
-        
-       
-        private BitmapImage _currentFrame;   
+
+        private BitmapImage _currentFrame;
         public BitmapImage CurrentFrame
         {
             get => _currentFrame;
@@ -51,19 +51,43 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         public DailyInspectionViewModel()
         {
-
             StartDailyInspectionCommand = new RelayCommand(StartDailyInspection);
             SendCommand = new RelayCommand(SendInspection, CanSendInspection);
             LoadInspections();
             LoadStationNames();
             LoadStationQuestions();
         }
-         
+
         private void SendInspection(object parameter)
         {
             if (SelectedInspection != null && LoginViewModel.LoggedInUser != null &&
                 SignatureStrokes != null && SignatureStrokes.Count > 0)
             {
+                // Check if any station has a pending repair
+                bool hasPendingRepair = false;
+                foreach (var stationWithQuestions in StationQuestions)
+                {
+                    foreach (var question in stationWithQuestions.StationQuestions)
+                    {
+                        if ((question.YesSelected || question.NaSelected) &&
+                            question.ErrorType == 2 &&    // Ensure ErrorType is used correctly
+                            question.RepairPlan != null && // Check if RepairPlan has a value
+                            question.RepairedTime == null)
+                        {
+                            hasPendingRepair = true;
+                            break;
+                        }
+                    }
+                    if (hasPendingRepair)
+                        break;
+                }
+                // If any station has a pending repair, show the message and return
+                if (hasPendingRepair)
+                {
+                    MessageBox.Show("You cannot select Ready to Use or Caution as there is a pending repair for one or more stations.", "Error");
+                    return;
+                }
+
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     SignatureStrokes.Save(memoryStream);
@@ -72,7 +96,7 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
                 // Set CheckDone to the current DateTime
                 SelectedInspection.CheckDone = DateTime.Now;
-                SelectedInspection.UpdatedBy = LoginViewModel.LoggedInUser.FirstName + LoginViewModel.LoggedInUser.LastName;
+                SelectedInspection.UpdatedBy = $"{LoginViewModel.LoggedInUser.FirstName} {LoginViewModel.LoggedInUser.LastName}";
                 SelectedInspection.IsSent = (int)SendStatus.Sended;
 
                 // Update the SelectedInspection entity in the database context
@@ -80,21 +104,16 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
                 foreach (var stationWithQuestions in StationQuestions)
                 {
-                    // Assuming StationWithQuestions has a property named StationName
                     var station = _context.Stations.FirstOrDefault(s => s.Name == stationWithQuestions.StationName);
 
                     if (station == null)
-                    {
-                        // Log error or notify the user that the station does not exist
                         continue;
-                    }
 
                     foreach (var question in stationWithQuestions.StationQuestions)
                     {
                         int? errorType = question.YesSelected ? 0 :
-                 question.NaSelected ? 1 :
-                 question.NoSelected ? 2 : (int?)null;
-
+                                         question.NaSelected ? 1 :
+                                         question.NoSelected ? 2 : (int?)null;
 
                         var inspectionQuestionResult = new InspectionQuestionResult
                         {
@@ -103,12 +122,13 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                             QuestionText = question.QuestionText,
                             ErrorType = errorType,
                             Notes = question.Notes,
-                            InsertTimeStamp = DateTime.Now,
+                            InsertTimeStamp = DateTime.Now, // Correction made here
                             InsertedBy = LoginViewModel.LoggedInUser.FullName,
                             UpdatedBy = LoginViewModel.LoggedInUser.FullName,
                             UpdateTimeStamp = DateTime.Now,
-                            StationIdent = station.Ident // Use the station's Ident from the database
+                            StationIdent = station.Ident
                         };
+
 
                         _context.InspectionQuestionResults.Add(inspectionQuestionResult);
                     }
@@ -120,7 +140,6 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 }
                 catch (DbUpdateException dbEx)
                 {
-                    // This will give us more details about the update exception
                     var errorMsg = dbEx.InnerException?.Message ?? dbEx.Message;
                     MessageBox.Show($"Error saving inspection results: {errorMsg}", "Database Error");
                 }
@@ -147,20 +166,17 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 }
             }
         }
-      
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-       
+
         private StrokeCollection _signatureStrokes;
 
         public ObservableCollection<string> StationNames { get; private set; }
         public ObservableCollection<Inspection> Inspections { get; private set; }
         public ObservableCollection<StationWithQuestions> StationQuestions { get; private set; } = new ObservableCollection<StationWithQuestions>();
-
-       
 
         private Inspection _selectedInspection;
         public Inspection SelectedInspection
@@ -202,32 +218,29 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 var newInspection = new Inspection
                 {
                     CheckStart = DateTime.Now,
-                    Type = 1, // Assuming '1' signifies a daily inspection type
+                    Type = 1,
                     InsertedBy = LoginViewModel.LoggedInUser.FullName,
-                    UpdatedBy =  LoginViewModel.LoggedInUser.FullName,
+                    UpdatedBy = LoginViewModel.LoggedInUser.FullName,
                     EmployeeIdent = LoginViewModel.LoggedInUser.Ident,
                     RfidUid = LoginViewModel.LoggedInUser.RfidUid
                 };
 
                 _context.Inspections.Add(newInspection);
-                _context.SaveChanges(); // Save changes to assign an ID to the newInspection
+                _context.SaveChanges();
 
-                LoadInspections(); // Reload the inspections list to include the new one
+                LoadInspections();
+                SelectedInspection = newInspection;
 
-                SelectedInspection = newInspection; // Set the newly created inspection as selected
-
-                // Enable sending after starting a new inspection
                 IsInspectionReadyToSend = true;
                 IsScanEnabled = true;
                 MessageBox.Show($"Daily Inspection with ID \"{newInspection.Ident}\" started.", "Inspection Started");
-                IsScanEnabled = true; // Enable scanning
+                IsScanEnabled = true;
             }
             else
             {
                 MessageBox.Show("No user logged in.");
             }
-        } 
-
+        }
 
         private void LoadInspections()
         {
@@ -245,7 +258,7 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void LoadStationQuestions()
         {
-            StationQuestions.Clear(); // Clear existing items
+            StationQuestions.Clear();
 
             var allStations = _context.Stations.Include(st => st.StationQuestions).ToList();
 
@@ -264,12 +277,5 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
     }
 }
-
-
- 
-
-
-      

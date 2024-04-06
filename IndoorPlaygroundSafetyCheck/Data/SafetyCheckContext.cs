@@ -11,9 +11,11 @@ public partial class SafetyCheckContext : DbContext
     public SafetyCheckContext()
     {
     }
-   
-        public DbSet<Station> Stations { get; set; }
-        public DbSet<InspectionQuestionResult> InspectionQuestionResults { get; set; }
+    public DbSet<InspectionQuestionResult> InspectionQuestionResults { get; set; }
+
+    
+    public DbSet<Station> Stations { get; set; }
+      
 
         // Define your OnConfiguring or use a constructor with options to set up the DbContext
     
@@ -84,6 +86,13 @@ public partial class SafetyCheckContext : DbContext
             entity.ToTable("Message", "SafetyCheck");
             entity.HasKey(e => e.Ident);
         });
+        modelBuilder.Entity<InspectionQuestionResult>()
+           .ToTable("InspectionQuestionResult", schema: "SafetyCheck")
+           .HasKey(iqr => iqr.Ident);
+
+        // Other configurations
+
+        base.OnModelCreating(modelBuilder);
 
         OnModelCreatingPartial(modelBuilder);
 
