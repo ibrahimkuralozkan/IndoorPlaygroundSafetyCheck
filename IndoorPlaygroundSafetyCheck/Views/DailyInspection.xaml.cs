@@ -1,10 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Ink;
 using IndoorPlaygroundSafetyCheck.ViewModels;
-using IndoorPlaygroundSafetyCheck.Converters;
 using IndoorPlaygroundSafetyCheck.Models;
-using System.ComponentModel;
-using System.Windows.Controls; 
 
 namespace IndoorPlaygroundSafetyCheck.Views
 {
@@ -13,30 +14,31 @@ namespace IndoorPlaygroundSafetyCheck.Views
     /// </summary>
     public partial class DailyInspection : UserControl
     {
-       
         private MainWindow _mainWindow;
         public event EventHandler RequestClose;
+
         public DailyInspection(MainWindow mainWindow)
         {
             InitializeComponent();
             DataContext = new DailyInspectionViewModel();
             _mainWindow = mainWindow;
         }
+
         private void DisplayStatisticsView()
         {
-           _mainWindow.MainContentArea.Content = new Statistics();
+            _mainWindow.MainContentArea.Content = new Statistics();
         }
+
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             DisplayStatisticsView();
         }
+
         private void ClearSignature_Click(object sender, RoutedEventArgs e)
         {
             signatureCanvas.Strokes.Clear(); // Clears all strokes from the InkCanvas
         }
-        // Inside the DailyInspection class
 
-        // In your DailyInspection view code-behind
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as DailyInspectionViewModel;
@@ -77,9 +79,5 @@ namespace IndoorPlaygroundSafetyCheck.Views
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-      
-
-       
     }
 }
