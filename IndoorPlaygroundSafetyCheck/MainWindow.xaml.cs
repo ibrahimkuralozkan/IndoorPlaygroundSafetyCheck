@@ -70,7 +70,7 @@ namespace IndoorPlaygroundSafetyCheck
 
             // Visibility for Mitarbeiter specific button (Daily Inspection)
             btn_DailyInspection.Visibility = Visibility.Visible; // Always visible
-            btn_AfterInspection.Visibility = Visibility.Visible; // Always visible
+            //btn_AfterInspection.Visibility = Visibility.Visible; // Always visible
             btn_Training.Visibility = Visibility.Visible; // Always visible
         }
         private void DailyInspection_Click(object sender, RoutedEventArgs e)

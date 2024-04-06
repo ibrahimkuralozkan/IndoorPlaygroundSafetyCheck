@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:converters="clr-namespace:IndoorPlaygroundSafetyCheck.Converters"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             mc:Ignorable="d" Height="450" Width="800">
+             mc:Ignorable="d" Height="700" Width="1000">
     <UserControl.DataContext>
         <vm:StatisticsViewModel/>
     </UserControl.DataContext>
@@ -27,28 +27,28 @@
 
             <!-- Error Type Counts -->
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <TextBlock Text="Stations by Error Type" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="Todays Stations by Error Type" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Ready To Use: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding ErrorTypeZeroCount}"/>
+                    <TextBlock FontSize="15" Text="Ready To Use: " />
+                    <TextBlock FontSize="15" Text="{Binding ErrorTypeZeroCount}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Warnings: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding ErrorTypeOneCount}"/>
+                    <TextBlock FontSize="15" Text="Warnings: "/>
+                    <TextBlock FontSize="15" Text="{Binding ErrorTypeOneCount}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Errors: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding ErrorTypeTwoCount}"/>
+                    <TextBlock FontSize="15" Text="Errors: " />
+                    <TextBlock FontSize="15" Text="{Binding ErrorTypeTwoCount}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Unchecked: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding UncheckedStationsCount}"/>
+                    <TextBlock FontSize="15" Text="Unchecked: " />
+                    <TextBlock FontSize="15" Text="{Binding UncheckedStationsCount}"/>
                 </StackPanel>
             </StackPanel>
 
             <!-- Today's Statistics -->
             <StackPanel Grid.Row="1" Orientation="Vertical">
-                <TextBlock Text="Today's Statistics" FontWeight="Bold" Margin="0,20,0,5"/>
+                <TextBlock Text="Today's Statistics" FontSize="20" FontWeight="Bold" Margin="0,20,0,20"/>
                 <ListView ItemsSource="{Binding StationsErrorTypeZero}" Background="LightGreen" MinHeight="50" Margin="0,0,0,10">
                     <ListView.View>
                         <GridView>

@@ -59,27 +59,33 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <StackPanel Grid.Column="0" Grid.Row="0" Background="#EEE">
+        <Border Background="DarkGray" CornerRadius="20">
+        <StackPanel Margin="0,20,0,0" Grid.Column="0" Grid.Row="0"  Height="700" >
+            
             <Image Width="50" Height="50" Margin="10,20,0,10" Source="pack://application:,,,/Images/Icons/user.png"/>
-            <TextBlock x:Name="textBlockFullName" Style="{StaticResource FullNameTextBlock}"/>
-            <Button x:Name="btn_DailyInspection" Content="Daily Inspection" Style="{StaticResource ModernButton}" Click="DailyInspection_Click"/>
-            <Button x:Name="btn_AfterInspection" Content="After Repairment Inspection" Style="{StaticResource ModernButton}" Click="AfterRepairInspection_Click"/>
-            <Button x:Name="btn_AddStation" Content="Add Station (Admin)" Style="{StaticResource ModernButton}" Click="AddStation_Click"/>
-            <Button x:Name="btn_InspectionQuestion" Content="Question Catalogue (Admin)" Style="{StaticResource ModernButton}" Click="InspectionQuestions_Click"/>
-            <Button x:Name="btn_Question" Content="Question (Admin)" Style="{StaticResource ModernButton}" Click="Questions_Click"/>
-            <Button x:Name="btn_DeleteStation" Content="Delete Station (Admin)" Style="{StaticResource ModernButton}" Click="DeleteStation_Click"/>
-            <Button x:Name="btn_AddUser" Content="Add User (Admin)" Style="{StaticResource ModernButton}" Click="AddUser_Click"/>
-            <Button x:Name="btn_DeleteUser" Content="Delete User (Admin)" Style="{StaticResource ModernButton}" Click="DeleteUser_Click"/>
-            <Button x:Name="btn_Statistics" Content="Statistics" Style="{StaticResource ModernButton}" Click="Statistics_Click"/>
-            <Button x:Name="btn_Training" Content="Training" Style="{StaticResource ModernButton}" Click="Training_Click"/>
-        </StackPanel>
+            <TextBlock  x:Name="textBlockFullName" Style="{StaticResource FullNameTextBlock}"/>
+                <Button Margin="5" Background="Green" x:Name="btn_DailyInspection" Content="Inspektion"  Style="{StaticResource {x:Type Button}}" Click="DailyInspection_Click"/>
+                <Button Margin="5" Background="Coral"  x:Name="btn_Statistics" Content="Statistik"  Style="{StaticResource {x:Type Button}}" Click="Statistics_Click"/>
+                <!--<Button x:Name="btn_AfterInspection" Content="After Repairment Inspection" Style="{StaticResource ModernButton}" Click="AfterRepairInspection_Click"/>-->
+                <Button Margin="5" x:Name="btn_AddStation" Content="Station Hinzufügen"         
+                        Style="{StaticResource {x:Type Button}}"  Background="DarkGoldenrod"         Click="AddStation_Click"/>
 
+
+
+                <Button Margin="5" Background="Gold"       x:Name="btn_InspectionQuestion" Content="Fragenkatalog" Style="{StaticResource {x:Type Button}}" Click="InspectionQuestions_Click"/>
+                <Button Margin="5" Background="DarkCyan"  x:Name="btn_Question" Content="Inspektionsfragen"  Style="{StaticResource {x:Type Button}}" Click="Questions_Click"/>
+                <Button Margin="5" Background="DarkRed"  x:Name="btn_DeleteStation" Content="Station Löschen"  Style="{StaticResource {x:Type Button}}" Click="DeleteStation_Click"/>
+                <Button Margin="5" Background="DarkOrchid"  x:Name="btn_AddUser" Content="Benutzer Hinzufügen"  Style="{StaticResource {x:Type Button}}" Click="AddUser_Click"/>
+                <Button Margin="5" Background="Violet"  x:Name="btn_DeleteUser" Content="Benutzer löschen"  Style="{StaticResource {x:Type Button}}" Click="DeleteUser_Click"/>
+                <Button Margin="5" Background="Cyan" x:Name="btn_Training" Content="Lernverfahren"  Style="{StaticResource {x:Type Button}}" Click="Training_Click"/>
+       
+        </StackPanel>
+        </Border>
         <ContentControl x:Name="MainContentArea" Grid.Column="1" Grid.Row="0">
             <!-- Your content goes here -->
         </ContentControl>
 
-        <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" CornerRadius="20" Background="Gray" Margin="0,20,0,50">
+        <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" CornerRadius="20" Background="DarkGray" Margin="0,0,0,50">
             <TextBlock x:Name="StatusTimeText" Text="{Binding CurrentDateTime}" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,10" />
         </Border>
     </Grid>
