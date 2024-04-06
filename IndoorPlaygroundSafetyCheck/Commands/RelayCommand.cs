@@ -3,8 +3,7 @@ using System.Windows.Input;
 
 namespace IndoorPlaygroundSafetyCheck.Commands
 {
-    using System;
-    using System.Windows.Input;
+   
 
     public class RelayCommand : ICommand
     {

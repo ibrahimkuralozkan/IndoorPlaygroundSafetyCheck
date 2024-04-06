@@ -8,56 +8,93 @@ using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
 using Microsoft.EntityFrameworkCore;
+// Ensure System.Windows is added for MessageBox (used here for simplicity)
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
     public class ManagerStatisticsViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<InspectionQuestionResult> _inspectionQuestionResults;
-        private int? _selectedErrorType; // Changed to int? to handle error type as integer
-        public int? SelectedErrorType // Changed this to an integer to match your ErrorType definition
+        public ObservableCollection<InspectionQuestionResult> InspectionQuestionResults { get; set; }
+        public List<int> ErrorTypes { get; } = new List<int> { 0, 1, 2 };
+
+        private int? _selectedErrorType;
+        private DateTime _startDate = DateTime.Today.AddDays(-7);
+        private DateTime _endDate = DateTime.Today;
+        private InspectionQuestionResult _selectedInspectionQuestionResult;
+        private readonly SafetyCheckContext _context;
+
+        public int? SelectedErrorType
         {
             get => _selectedErrorType;
             set
             {
                 _selectedErrorType = value;
                 OnPropertyChanged();
-                LoadData(); // Reload data when selection changes
+                LoadData();
             }
         }
 
-        public List<int> ErrorTypes { get; } = new List<int> { 0, 1, 2 }; // Assuming ErrorTypes are integers
-
-        //
-        public ObservableCollection<InspectionQuestionResult> InspectionQuestionResults
+        public DateTime StartDate
         {
-            get => _inspectionQuestionResults;
+            get => _startDate;
             set
             {
-                _inspectionQuestionResults = value;
+                _startDate = value;
+                OnPropertyChanged();
+                LoadData();
+            }
+        }
+
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set
+            {
+                _endDate = value;
+                OnPropertyChanged();
+                LoadData();
+            }
+        }
+
+        public InspectionQuestionResult SelectedInspectionQuestionResult
+        {
+            get => _selectedInspectionQuestionResult;
+            set
+            {
+                _selectedInspectionQuestionResult = value;
                 OnPropertyChanged();
             }
         }
 
-        // Date range properties
-        public DateTime StartDate { get; set; } = DateTime.Today.AddDays(-7); // Default to last 7 days
-        public DateTime EndDate { get; set; } = DateTime.Today;
-
-        public ICommand LoadDataCommand { get; }
-
-        private readonly SafetyCheckContext _context;
+        public ICommand SaveCommand { get; private set; }
+        public ICommand UpdateRepairPlanCommand { get; private set; }
 
         public ManagerStatisticsViewModel(SafetyCheckContext context)
         {
             _context = context;
-            // Use a lambda expression to adapt the method group to Action<object>
-            LoadDataCommand = new RelayCommand(obj => LoadData());
-            LoadData(); // Initial load
+            SaveCommand = new RelayCommand(param => SaveRepairPlan());
+            UpdateRepairPlanCommand = new RelayCommand(param => UpdateRepairPlan());
+            LoadData();
         }
 
+        private void SaveRepairPlan()
+        {
+            if (SelectedInspectionQuestionResult != null)
+            {
+                _context.Update(SelectedInspectionQuestionResult);
+                _context.SaveChanges();
+                // MessageBox.Show("Repairment Plan updated successfully.");
+                // Consider using an event or a message service for MVVM compliance.
+            }
+        }
 
+        private void UpdateRepairPlan()
+        {
+            // Save changes to the database context
+            _context.SaveChanges();
+        }
 
-        private void LoadData()
+        public void LoadData()
         {
             var query = _context.InspectionQuestionResults
                 .Include(iqr => iqr.InspectionIdentNavigation)
@@ -65,10 +102,11 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 .Where(iqr =>
                     iqr.InspectionIdentNavigation.CheckStart >= StartDate &&
                     iqr.InspectionIdentNavigation.CheckDone <= EndDate &&
-                    (!SelectedErrorType.HasValue || iqr.ErrorType == SelectedErrorType)) // Filter by selected error type
+                    (!SelectedErrorType.HasValue || iqr.ErrorType == SelectedErrorType))
                 .ToList();
 
             InspectionQuestionResults = new ObservableCollection<InspectionQuestionResult>(query);
+            OnPropertyChanged(nameof(InspectionQuestionResults));
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
