@@ -9,35 +9,36 @@
 
         <!-- User Input Fields Section -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="First Name:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="First Name:" FontWeight="Bold"/>
             <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,10" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
 
-            <TextBlock Text="Last Name:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Last Name:" FontWeight="Bold"/>
             <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,10" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
 
-            <TextBlock Text="Position Ident:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Position:" FontWeight="Bold"/>
             <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,10" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
 
-            <TextBlock Text="RFID UID:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Rfid Card Number:" FontWeight="Bold"/>
             <TextBox Text="{Binding RfidUid, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,10" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
 
-            <Button Content="Add User" 
+            <Button Style="{StaticResource SmallButtonStyle }"
+                Content="Add User" 
                     Command="{Binding AddUserCommand}" 
                     Width="120" 
                     Height="40" 
@@ -48,6 +49,7 @@
                     BorderThickness="0" 
                     Margin="5"
                     Cursor="Hand"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="User List:" FontWeight="Bold"/>
         </StackPanel>
 
         <!-- List of Users Section -->
@@ -56,6 +58,7 @@
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="120"/>
                     <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" Width="120"/>
+                    <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}" Width="120"/>
                 </GridView>
             </ListView.View>
         </ListView>

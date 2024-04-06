@@ -27,6 +27,11 @@ namespace IndoorPlaygroundSafetyCheck.Views
             InitializeComponent();
             DataContext = new AddUserViewModel(); // Set the DataContext to your ViewModel
         }
+
+        private void StackPanel_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
+        }
     }
 
 }

@@ -40,19 +40,20 @@
 
         <!-- Station Name Section -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Station Name:" FontWeight="Bold"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Add Station Name:" FontWeight="Bold"/>
             <TextBox Text="{Binding StationName, UpdateSourceTrigger=PropertyChanged}" 
                      BorderThickness="1" 
                      BorderBrush="#CCCCCC" 
                      Padding="5"/>
-            <Button Content="Add Station" 
+            <Button   Style="{StaticResource SmallButtonStyle}" Content="Add Station" 
                     Command="{Binding AddStationCommand}" 
                     Width="120" 
                     Height="40"/>
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Station List:" FontWeight="Bold"/>
         </StackPanel>
 
         <!-- List of Stations Section -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Stations}" Margin="0,10,0,0">
+        <ListView Grid.Row="1" ItemsSource="{Binding Stations}" Margin="0,0,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" Margin="5"/>
