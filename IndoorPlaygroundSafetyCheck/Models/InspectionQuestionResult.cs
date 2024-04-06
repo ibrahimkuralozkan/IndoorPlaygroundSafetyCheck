@@ -21,7 +21,7 @@ namespace IndoorPlaygroundSafetyCheck.Models
         // Add the new properties here
         public DateTime? RepairPlan { get; set; } // Nullable, assuming the repair plan date can be null
         public DateTime? RepairedTime { get; set; } // Nullable, assuming the repaired time can be null
-
+        public virtual Station Station { get; set; } = null!;
         public virtual Inspection InspectionIdentNavigation { get; set; } = null!;
         public virtual StationQuestion StationQuestionIdentNavigation { get; set; } = null!;
     }

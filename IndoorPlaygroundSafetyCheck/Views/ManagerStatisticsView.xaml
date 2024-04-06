@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             mc:Ignorable="d">
+             mc:Ignorable="d" MaxHeight="600">
     <Grid Margin="0,40,0,0">
         <Grid.RowDefinitions>
             <RowDefinition  Height="Auto"/>
@@ -32,9 +32,10 @@
 
         </StackPanel>
         <DataGrid Margin="10,10,20,0" AutoGenerateColumns="False" ItemsSource="{Binding InspectionQuestionResults}" SelectedItem="{Binding SelectedInspectionQuestionResult, Mode=TwoWay}" Grid.Row="2">
-
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Station Ident" Binding="{Binding StationIdent}" />
+                <DataGridTextColumn Header="Station Name" Binding="{Binding Station.Name}" />
+                <!-- Add this column -->
                 <DataGridTextColumn Header="Question Text" Binding="{Binding QuestionText}" />
                 <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}" />
                 <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" />
@@ -70,5 +71,6 @@
                 <DataGridTextColumn Header="Repaired Time" Binding="{Binding RepairedTime, StringFormat={}{0:G}}" />
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </UserControl>
