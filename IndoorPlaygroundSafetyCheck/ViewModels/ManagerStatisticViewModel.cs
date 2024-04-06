@@ -152,6 +152,7 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
             var query = _context.InspectionQuestionResults
                 .Include(iqr => iqr.InspectionIdentNavigation)
                 .Include(iqr => iqr.StationQuestionIdentNavigation)
+                .Include(iqr => iqr.Station) // Include Station table
                 .Where(iqr =>
                     iqr.InspectionIdentNavigation.CheckStart >= StartDate &&
                     iqr.InspectionIdentNavigation.CheckDone <= EndDate &&
