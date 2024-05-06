@@ -16,14 +16,15 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" Margin="10,10,10,0">
             <DatePicker x:Name="StartDatePicker" Margin="5" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
             <DatePicker x:Name="EndDatePicker" Margin="5" SelectedDate="{Binding EndDate, Mode=TwoWay}" />
+            <Label Content="Fehlertyp:"></Label>
             <ComboBox Width="120" Margin="5"
                       ItemsSource="{Binding ErrorTypes}"
                       SelectedItem="{Binding SelectedErrorType, Mode=TwoWay}"/>
-            <Button Content="Load Data" Margin="5" Click="LoadData_Click"/>
+            <Button Content="Daten laden" Margin="5" Click="LoadData_Click"/>
             <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" Margin="5">
-                <Label Content="Repairment Plan Date:"/>
+                <Label Content="Reparaturplan-Datum:"/>
                 <DatePicker SelectedDate="{Binding SelectedInspectionQuestionResult.RepairPlan, Mode=TwoWay}" />
-                <Label Content="Repaired Time:"/>
+                <Label Content="Reparaturzeit:"/>
                 <DatePicker SelectedDate="{Binding SelectedInspectionQuestionResult.RepairedTime, Mode=TwoWay}" />
                 <Button Content="Save Changes" Command="{Binding SaveCommand}"/>
             </StackPanel>
@@ -36,14 +37,14 @@
                 <DataGridTextColumn Header="Station Ident" Binding="{Binding StationIdent}" />
                 <DataGridTextColumn Header="Station Name" Binding="{Binding Station.Name}" />
                 <!-- Add this column -->
-                <DataGridTextColumn Header="Question Text" Binding="{Binding QuestionText}" />
-                <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}" />
-                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" />
-                <DataGridTextColumn Header="Updated By" Binding="{Binding UpdatedBy}" />
-                <DataGridTextColumn Header="Update Timestamp" Binding="{Binding UpdateTimeStamp, StringFormat={}{0:G}}" />
+                <DataGridTextColumn Header="Frage Text" Binding="{Binding QuestionText}" />
+                <DataGridTextColumn Header="Fehlertyp" Binding="{Binding ErrorType}" />
+                <DataGridTextColumn Header="Notizen" Binding="{Binding Notes}" />
+                <DataGridTextColumn Header="Aktualisiert von" Binding="{Binding UpdatedBy}" />
+                <DataGridTextColumn Header="Aktualisierungszeitstempel" Binding="{Binding UpdateTimeStamp, StringFormat={}{0:G}}" />
 
                 <!-- Updated Repairment Plan Column with DatePicker -->
-                <DataGridTemplateColumn Header="Repairment Plan">
+                <DataGridTemplateColumn Header="Reparatur Plan">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding RepairPlan, StringFormat={}{0:d}}" />
@@ -68,7 +69,7 @@
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Repaired Time" Binding="{Binding RepairedTime, StringFormat={}{0:G}}" />
+                <DataGridTextColumn Header="Reparaturzeit" Binding="{Binding RepairedTime, StringFormat={}{0:G}}" />
             </DataGrid.Columns>
         </DataGrid>
 
