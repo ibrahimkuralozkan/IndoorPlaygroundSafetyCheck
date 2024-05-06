@@ -12,8 +12,11 @@
         <TextBlock Grid.Row="0" Height="50" Style="{StaticResource PageHeaderTextStyle}" Text="Fragenkatalog" FontWeight="Bold"></TextBlock>
 
         <StackPanel Background="#f0f0f0" Grid.Row="1" Margin="20">
-           
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="New Question Catalogue:" FontWeight="Bold"/>
+
+            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Neue Fragenkatalog:" FontWeight="Bold" MouseDown="TextBlockMouseDown"/>
+
+
+
             <TextBox x:Name="DescriptionTextBox" Margin="0 0 0 10" Background="#FFFFFF" BorderBrush="#BDBDBD" BorderThickness="1" Padding="5">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
@@ -35,10 +38,10 @@
                 </TextBox.Style>
             </TextBox>
 
-            <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Add Question Catalogue" Margin="0 0 0 10" Background="#4CAF50" Foreground="White" Padding="10" Click="SaveButton_Click"/>
+            <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Fragenkatalog Hinzufügen" Margin="0 0 0 10" Background="#4CAF50" Foreground="White" Padding="10" Click="SaveButton_Click"/>
             <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Question Catalogue List:" FontWeight="Bold"/>
             <ListBox Background="#f0f0f0" Height="400" ItemsSource="{Binding QuestionCatalogues}" DisplayMemberPath="Description" SelectedItem="{Binding SelectedQuestionCatalogue}" BorderBrush="#BDBDBD" BorderThickness="1" Padding="5" Margin="0 0 0 10"/>
-            <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Delete Question Catalogue" Margin="0 0 0 10" Background="#F44336" Foreground="White" Padding="10" Click="DeleteButton_Click"/>
+            <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Fragenkatalog löschen" Margin="0 0 0 10" Background="#F44336" Foreground="White" Padding="10" Click="DeleteButton_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

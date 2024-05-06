@@ -13,8 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using System.Windows.Controls;
+
 using IndoorPlaygroundSafetyCheck.ViewModels;
+using System.Diagnostics;
 
 namespace IndoorPlaygroundSafetyCheck.Views
 {
@@ -32,6 +33,28 @@ namespace IndoorPlaygroundSafetyCheck.Views
             vm?.SaveQuestionCatalogue(DescriptionTextBox.Text);
             DescriptionTextBox.Clear();
         }
+        private void TextBlockMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                using (Process powerShellProcess = new Process())
+                {
+                    powerShellProcess.StartInfo.FileName = "powershell";
+                    powerShellProcess.StartInfo.Arguments = "-Command \"Start-Process osk.exe\"";
+                    powerShellProcess.StartInfo.UseShellExecute = false;
+                    powerShellProcess.StartInfo.CreateNoWindow = true;
+                    powerShellProcess.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to launch OSK via PowerShell: " + ex.Message);
+            }
+        }
+
+
+
+
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {

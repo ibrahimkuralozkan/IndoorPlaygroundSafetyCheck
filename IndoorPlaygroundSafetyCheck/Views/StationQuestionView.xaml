@@ -17,24 +17,24 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" >
-                <TextBlock Height="50" Grid.Row="  0" Style="{StaticResource PageHeaderTextStyle}" Text="Station Hinzufügen" FontWeight="Bold" />
+                <TextBlock Height="50" Grid.Row="  0" Style="{StaticResource PageHeaderTextStyle}" Text="Inspektionsfragen" FontWeight="Bold" />
                 
             </Border>
             <Border Grid.Row="1" CornerRadius="5" Padding="20" Background="#f0f0f0">
                 <StackPanel>
-                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Add New Question:" FontWeight="Bold"/>
-                    <TextBox x:Name="QuestionTextInput" Text="Enter Question Text" Margin="0,15,0,10" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
-                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Select Station:" FontWeight="Bold"/>
-                    <ComboBox Height="20" x:Name="StationDropDown" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" Margin="0,0,0,10" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
-                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Select Question Catalogue:" FontWeight="Bold"/>
-                    <ComboBox Height="20" x:Name="QuestionCatalogueDropDown" DisplayMemberPath="Description" ItemsSource="{Binding QuestionCatalogues}" Margin="0,0,0,20" SelectedItem="{Binding SelectedQuestionCatalogue}" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Neue Frage hinzufügen:" FontWeight="Bold"/>
+                    <TextBox x:Name="QuestionTextInput" Text="Fragentext eingeben" Margin="0,15,0,10" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Station auswählen:" FontWeight="Bold"/>
+                    <ComboBox Height="50" x:Name="StationDropDown" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" Margin="0,0,0,10" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
+                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Fragenkatalog auswählen:" FontWeight="Bold"/>
+                    <ComboBox Height="50" x:Name="QuestionCatalogueDropDown" DisplayMemberPath="Description" ItemsSource="{Binding QuestionCatalogues}" Margin="0,0,0,20" SelectedItem="{Binding SelectedQuestionCatalogue}" Background="#EEEEEE" BorderThickness="1" BorderBrush="#CCCCCC" Padding="10"/>
                     <Button  Style="{StaticResource SmallButtonStyle}" x:Name="SaveButton" Content="Save" Width="120" Height="40" Click="SaveButton_Click" Background="#4CAF50" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Stations With Questions:" FontWeight="Bold"/>
+                    <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Stationen mit Fragen:" FontWeight="Bold"/>
                 </StackPanel>
             </Border>
 
             <!-- List of Station Questions Section -->
-            <Border Grid.Row="2" CornerRadius="5" Margin="0,0,0,0" Background="#f0f0f0">
+            <Border Height="200" Grid.Row="2" CornerRadius="5" Margin="0,0,0,0" Background="#f0f0f0">
                 <ListView ItemsSource="{Binding StationQuestions}" Background="#f0f0f0">
                     <ListView.ItemTemplate>
                         <DataTemplate>

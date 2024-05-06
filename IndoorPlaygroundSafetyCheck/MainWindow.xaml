@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Indoor Playground SafetyCheck" WindowState="Maximized">
+        Title="Indoor Playground SafetyCheck" WindowState="Maximized" Width="1200" Height="1200">
     <Window.Resources>
         <!-- Base Button Style with Modern Effects -->
         <Style x:Key="ModernButton" TargetType="Button">
@@ -60,7 +60,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Background="Transparent" CornerRadius="20">
-        <StackPanel Margin="0,20,0,0" Grid.Column="0" Grid.Row="0"  Height="700" >
+        <StackPanel  Margin="10,20,0,0" Grid.Column="0" Grid.Row="0"  Height="700" >
             
             <Image Width="50" Height="50" Margin="10,20,0,10" Source="pack://application:,,,/Images/Icons/user.png"/>
             <TextBlock  x:Name="textBlockFullName" Style="{StaticResource FullNameTextBlock}"/>

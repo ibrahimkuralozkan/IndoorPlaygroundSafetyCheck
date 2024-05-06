@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:IndoorPlaygroundSafetyCheck.Converters"
              xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels"
-             Background="#FFFFFF" Cursor="Hand"  >
+             Background="#FFFFFF" Cursor="Hand" Height="800"  >
 
     <UserControl.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -46,9 +46,9 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <RadioButton Background="Green" Content="Ready To Use"
                                                                     IsChecked="{Binding Path=YesSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <RadioButton Background="Orange" Content="Caution!"
+                                                        <RadioButton Background="Orange" Content="Warning!"
                                                                     IsChecked="{Binding Path=NaSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <RadioButton Background="Red" Content="Warning!!!"
+                                                        <RadioButton Background="Red" Content="Error!!!"
                                                                     IsChecked="{Binding Path=NoSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                         <TextBox Margin="90,0,0,0" Style="{StaticResource ModernTextBoxStyle}" Width="800" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>

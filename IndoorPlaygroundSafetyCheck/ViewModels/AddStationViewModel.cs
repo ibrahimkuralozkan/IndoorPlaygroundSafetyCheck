@@ -47,7 +47,7 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void AddStationExecute(object parameter)
         {
-            string inputRfidUid = Interaction.InputBox("Please use Admin RFID Card", "Admin RFID Verification", "");
+            string inputRfidUid = Interaction.InputBox("Bitte benutzen Sie die Admin-RFID-Karte", "Admin RFID Verification", "");
             if (!IsAdminRfidUid(inputRfidUid))
             {
                 MessageBox.Show("Invalid or unauthorized RFID UID.");
