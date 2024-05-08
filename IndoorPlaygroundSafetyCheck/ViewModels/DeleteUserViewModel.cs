@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿// path: IndoorPlaygroundSafetyCheck/ViewModels/DeleteUserViewModel.cs
+
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Commands;
@@ -6,30 +9,47 @@ using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using Microsoft.VisualBasic; // Needed for Interaction.InputBox
+using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
     public class DeleteUserViewModel : INotifyPropertyChanged
     {
-        private readonly Data.SafetyCheckContext _context = new Data.SafetyCheckContext();
+        private readonly SafetyCheckContext _context = new SafetyCheckContext();
         public ObservableCollection<Employee> Employees { get; } = new ObservableCollection<Employee>();
 
         private Employee _selectedEmployee;
+        private string _warningMessage;
+
         public Employee SelectedEmployee
         {
             get => _selectedEmployee;
-            set { _selectedEmployee = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedEmployee = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string WarningMessage
+        {
+            get => _warningMessage;
+            set
+            {
+                if (_warningMessage != value)
+                {
+                    _warningMessage = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public ICommand DeleteUserCommand { get; }
 
         public DeleteUserViewModel()
         {
-            DeleteUserCommand = new Commands.RelayCommand(DeleteUserExecute, CanDeleteUserExecute);
+            DeleteUserCommand = new RelayCommand(DeleteUserExecute, CanDeleteUserExecute);
             LoadEmployees();
         }
 
@@ -47,55 +67,47 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void DeleteUserExecute(object parameter)
         {
-            // Input RFID UID from the admin to authorize deletion
             string inputRfidUid = Interaction.InputBox("Use Admin RFID Card please", "Admin RFID Verification", "");
 
-            // Check if RFID UID is valid and if the user has admin privileges
             if (string.IsNullOrWhiteSpace(inputRfidUid) || !IsAdminRfidUid(inputRfidUid))
             {
-                MessageBox.Show("Invalid or unauthorized RFID UID.", "Authorization Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                WarningMessage = "Invalid or unauthorized RFID UID.";
                 return;
             }
 
-            // Check if a user is selected
             if (SelectedEmployee == null || string.IsNullOrWhiteSpace(SelectedEmployee.RfidUid))
             {
-                MessageBox.Show("No employee selected or invalid RFID UID.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                WarningMessage = "No employee selected or invalid RFID UID.";
                 return;
             }
 
             try
             {
-                // Ensure the DbContext is not null
-                if (_context == null)
-                {
-                    MessageBox.Show("Database context is not initialized.", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                // Call the DeleteEmployee method in the context to execute the stored procedure
-                _context.DeleteEmployee(SelectedEmployee.RfidUid);
-
-                // Ensure changes are saved to the database
+                _context.Employees.Remove(SelectedEmployee);
                 _context.SaveChanges();
-
-                // Refresh the employees list to reflect the deletion
-                LoadEmployees();
-
-                // Notify the user of successful deletion
-                //   MessageBox.Show($"{SelectedEmployee.FirstName} {SelectedEmployee.LastName} has been deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                Employees.Remove(SelectedEmployee);
+                WarningMessage = string.Empty; // Clear previous warnings if successful
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+            {
+                if (sqlEx.Number == 547)
+                {
+                    WarningMessage = "Selected user has associated records. Deletion is not permitted.";
+                }
+                else
+                {
+                    throw;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                WarningMessage = $"Unexpected error: {ex.Message}";
             }
         }
 
-
         private bool IsAdminRfidUid(string rfidUid)
         {
-            // Check if the provided RFID UID belongs to an admin
-            var employee = _context.Employees.FirstOrDefault(e => e.RfidUid == rfidUid && e.Position == 1); // Assuming PositionIdent 1 is for admins
+            var employee = _context.Employees.FirstOrDefault(e => e.RfidUid == rfidUid && e.Position == 1);
             return employee != null;
         }
 
