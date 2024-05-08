@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// path: IndoorPlaygroundSafetyCheck/Views/DeleteStationView.xaml.cs
+
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using IndoorPlaygroundSafetyCheck.ViewModels;
-
 
 namespace IndoorPlaygroundSafetyCheck.Views
 {
@@ -22,12 +11,18 @@ namespace IndoorPlaygroundSafetyCheck.Views
         public DeleteStationView()
         {
             InitializeComponent();
-            DataContext = new DeleteStationViewModel();
-        }
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Your deletion logic here, or simply invoke the command if applicable
         }
 
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as DeleteStationViewModel;
+            vm?.DeleteStationCommand.Execute(null);
+
+            // Display the message box if there's a warning message
+            if (!string.IsNullOrEmpty(vm?.WarningMessage))
+            {
+                MessageBox.Show(vm.WarningMessage, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
 }

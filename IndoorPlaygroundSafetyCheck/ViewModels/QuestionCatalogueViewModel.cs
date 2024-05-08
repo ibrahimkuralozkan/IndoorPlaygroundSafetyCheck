@@ -1,18 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Runtime.ConstrainedExecution;
+using System.Windows.Shapes;
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
     public class QuestionCatalogueViewModel : INotifyPropertyChanged
     {
         private readonly SafetyCheckContext _context;
-
         public ObservableCollection<QuestionCatalogue> QuestionCatalogues { get; set; }
 
         private QuestionCatalogue _selectedQuestionCatalogue;
@@ -29,10 +30,28 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
             }
         }
 
+      
+       
+
         public QuestionCatalogueViewModel()
         {
             _context = new SafetyCheckContext();
             QuestionCatalogues = new ObservableCollection<QuestionCatalogue>(_context.QuestionCatalogues.ToList());
+        }
+        // path: IndoorPlaygroundSafetyCheck/ViewModels/QuestionCatalogueViewModel.cs
+
+        private string _warningMessage;
+        public string WarningMessage
+        {
+            get => _warningMessage;
+            set
+            {
+                if (_warningMessage != value)
+                {
+                    _warningMessage = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public void SaveQuestionCatalogue(string description)
@@ -42,9 +61,9 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
                 var newQuestionCatalogue = new QuestionCatalogue
                 {
                     Description = description,
-                    InsertedBy = LoginViewModel.LoggedInUser.FullName, // Ensure you have access to the current user's FullName
+                    InsertedBy = LoginViewModel.LoggedInUser.FullName,
                     UpdatedBy = LoginViewModel.LoggedInUser.FullName,
-                    InsertTimeStamp = DateTime.Now, // Assuming these properties exist in your model
+                    InsertTimeStamp = DateTime.Now,
                     UpdateTimeStamp = DateTime.Now
                 };
 
@@ -58,11 +77,34 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
         {
             if (SelectedQuestionCatalogue != null)
             {
-                _context.QuestionCatalogues.Remove(SelectedQuestionCatalogue);
-                _context.SaveChanges();
-                QuestionCatalogues.Remove(SelectedQuestionCatalogue);
+                try
+                {
+                    _context.QuestionCatalogues.Remove(SelectedQuestionCatalogue);
+                    _context.SaveChanges();
+                    QuestionCatalogues.Remove(SelectedQuestionCatalogue);
+                    WarningMessage = string.Empty; // Clear previous messages if deletion is successful
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+                {
+                    // SQL Server's FK constraint violation error code is 547
+                    if (sqlEx.Number == 547)
+                    {
+                        WarningMessage = "Das ausgewählte Element hat einen Eintrag in der Historie. Aufgrund dessen ist das Löschen nicht gestattet.";
+                    }
+                    else
+                    {
+                        // Optionally log or re-throw other exceptions
+                        throw;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle any unexpected exceptions
+                    WarningMessage = $"Unexpected error: {ex.Message}";
+                }
             }
         }
+
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

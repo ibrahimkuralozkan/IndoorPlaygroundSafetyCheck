@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="IndoorPlaygroundSafetyCheck.Views.QuestionCatalogueView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels" >
+             xmlns:vm="clr-namespace:IndoorPlaygroundSafetyCheck.ViewModels">
 
     <Grid >
         <Grid.RowDefinitions>
@@ -12,11 +12,7 @@
         <TextBlock Grid.Row="0" Height="50" Style="{StaticResource PageHeaderTextStyle}" Text="Fragenkatalog" FontWeight="Bold"></TextBlock>
 
         <StackPanel Background="#f0f0f0" Grid.Row="1" Margin="20">
-
-            <TextBlock Style="{StaticResource HeadingTextBlock}" Text="Neue Fragenkatalog:" FontWeight="Bold" MouseDown="TextBlockMouseDown"/>
-
-
-
+                   
             <TextBox x:Name="DescriptionTextBox" Margin="0 0 0 10" Background="#FFFFFF" BorderBrush="#BDBDBD" BorderThickness="1" Padding="5">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
