@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
@@ -14,10 +15,11 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
     public class AddUserViewModel : INotifyPropertyChanged
     {
-        private readonly Data.SafetyCheckContext _context = new Data.SafetyCheckContext();
+        private readonly SafetyCheckContext _context = new SafetyCheckContext();
+
         public AddUserViewModel()
         {
-            AddUserCommand = new Commands.RelayCommand(AddUserExecute, CanAddUserExecute);
+            AddUserCommand = new RelayCommand(AddUserExecute, CanAddUserExecute);
             Employees = new ObservableCollection<Employee>();
             LoadEmployees();
         }
@@ -29,75 +31,68 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
             set
             {
                 _employees = value;
-                OnPropertyChanged(nameof(Employees));
+                OnPropertyChanged();
             }
         }
+
         private void LoadEmployees()
         {
             Employees.Clear();
-            using (var context = new Data.SafetyCheckContext())
+            var employees = _context.Employees.ToList();
+            foreach (var employee in employees)
             {
-                var employees = context.Employees.ToList();
-                foreach (var employee in employees)
-                {
-                    Employees.Add(employee);
-                }
+                Employees.Add(employee);
             }
         }
 
-        private string _insertedBy;
-        public string InsertedBy
-        {
-            get => _insertedBy;
-            set
-            {
-                _insertedBy = value; OnPropertyChanged(nameof(InsertedBy));
-            }
-        }
-
-        private string _updatedBy;
-        public string UpdatedBy
-        {
-            get => _updatedBy;
-            set
-            {
-                _updatedBy = value; OnPropertyChanged(nameof(UpdatedBy));
-            }
-        }
         private string _firstName;
         public string FirstName
         {
             get => _firstName;
-            set { _firstName = value; OnPropertyChanged(); }
+            set
+            {
+                _firstName = value;
+                OnPropertyChanged();
+            }
         }
 
         private string? _lastName;
         public string? LastName
         {
             get => _lastName;
-            set { _lastName = value; OnPropertyChanged(); }
+            set
+            {
+                _lastName = value;
+                OnPropertyChanged();
+            }
         }
 
-        private int _position;
-        public int Position
+        private string _position;
+        public string Position
         {
             get => _position;
-            set { _position = value; OnPropertyChanged(); }
+            set
+            {
+                _position = value;
+                OnPropertyChanged();
+            }
         }
 
         private string _rfidUid;
         public string RfidUid
         {
             get => _rfidUid;
-            set { _rfidUid = value; OnPropertyChanged(); }
+            set
+            {
+                _rfidUid = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand AddUserCommand { get; private set; }
+        public ICommand AddUserCommand { get; }
 
-       
         private bool CanAddUserExecute(object parameter)
         {
-            // Basic validation (extend as needed)
             return !string.IsNullOrWhiteSpace(FirstName) && !string.IsNullOrWhiteSpace(RfidUid);
         }
 
@@ -113,10 +108,8 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
             try
             {
-                // Assuming AddEmployee is a method that adds an employee and returns the ID
-                // For displaying names, we don't need to change how the employee is added
-                _context.AddEmployee(FirstName, LastName ?? string.Empty, Position, RfidUid);
-                _context.SaveChanges(); // Ensure changes are saved if AddEmployee does not
+                _context.AddEmployee(FirstName, LastName ?? string.Empty, ConvertPosition(Position), RfidUid);
+                _context.SaveChanges();
 
                 LoadEmployees();
                 MessageBox.Show($"User added successfully. New Employee: {FirstName} {LastName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -127,14 +120,17 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
             }
         }
 
-    
-
-    private bool IsAdminRfidUid(string rfidUid)
+        private bool IsAdminRfidUid(string rfidUid)
         {
-            // Assuming Employee has a RfidUid property and a PositionIdent property
             var employee = _context.Employees.FirstOrDefault(e => e.RfidUid == rfidUid && e.Position == 1);
             return employee != null;
         }
+
+        private int ConvertPosition(string position)
+        {
+            return position == "Manager" ? 1 : 2;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
