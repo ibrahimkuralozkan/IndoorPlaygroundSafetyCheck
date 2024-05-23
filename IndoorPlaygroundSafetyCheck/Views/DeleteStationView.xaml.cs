@@ -17,12 +17,6 @@ namespace IndoorPlaygroundSafetyCheck.Views
         {
             var vm = DataContext as DeleteStationViewModel;
             vm?.DeleteStationCommand.Execute(null);
-
-            // Display the message box if there's a warning message
-            if (!string.IsNullOrEmpty(vm?.WarningMessage))
-            {
-                MessageBox.Show(vm.WarningMessage, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
     }
 }

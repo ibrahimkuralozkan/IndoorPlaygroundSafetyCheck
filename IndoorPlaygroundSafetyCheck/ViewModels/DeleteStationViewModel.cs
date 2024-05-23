@@ -1,15 +1,14 @@
-﻿// path: IndoorPlaygroundSafetyCheck/ViewModels/DeleteStationViewModel.cs
-
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
-using Microsoft.VisualBasic;
+using IndoorPlaygroundSafetyCheck.Views;
 using Microsoft.EntityFrameworkCore;
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
@@ -60,42 +59,65 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void DeleteStationExecute(object parameter)
         {
-            string inputRfidUid = Interaction.InputBox("Bitte benutzen Sie die Admin-RFID-Karte", "Admin RFID Verification", "");
-            if (!IsAdminRfidUid(inputRfidUid))
+            var inputDialog = new InputDialog
             {
-                WarningMessage = "Invalid or unauthorized RFID UID.";
-                return;
-            }
+                Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)
+            };
 
-            try
+            if (inputDialog.ShowDialog() == true)
             {
-                _context.Stations.Remove(SelectedStation);
-                _context.SaveChanges();
-                Stations.Remove(SelectedStation);
-                WarningMessage = string.Empty; // Clear previous warning messages if successful
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
-            {
-                // SQL Server's FK constraint violation error code is 547
-                if (sqlEx.Number == 547)
+                string inputRfidUid = inputDialog.RfidUid;
+                if (!IsAdminRfidUid(inputRfidUid))
                 {
-                    WarningMessage = "Das ausgewählte Element hat einen Eintrag in der Historie. Aufgrund dessen ist das Löschen nicht gestattet.";
+                    WarningMessage = "Invalid or unauthorized RFID UID.";
+                    ShowWarningMessage(WarningMessage);
+                    return;
                 }
-                else
+
+                try
                 {
-                    throw; // Optionally re-throw other exceptions
+                    _context.Stations.Remove(SelectedStation);
+                    _context.SaveChanges();
+                    Stations.Remove(SelectedStation);
+                    WarningMessage = string.Empty; // Clear previous warning messages if successful
                 }
-            }
-            catch (Exception ex)
-            {
-                // Log or handle any unexpected exceptions
-                WarningMessage = $"Unexpected error: {ex.Message}";
+                catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+                {
+                    // SQL Server's FK constraint violation error code is 547
+                    if (sqlEx.Number == 547)
+                    {
+                        WarningMessage = "Das ausgewählte Element hat einen Eintrag in der Historie. Aufgrund dessen ist das Löschen nicht gestattet.";
+                        ShowWarningMessage(WarningMessage);
+                    }
+                    else
+                    {
+                        throw; // Optionally re-throw other exceptions
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle any unexpected exceptions
+                    WarningMessage = $"Unexpected error: {ex.Message}";
+                    ShowWarningMessage(WarningMessage);
+                }
             }
         }
 
         private bool IsAdminRfidUid(string rfidUid)
         {
             return _context.Employees.Any(e => e.RfidUid == rfidUid && e.Position == 1); // Assuming 1 is the Admin position identifier
+        }
+
+        private void ShowWarningMessage(string message)
+        {
+            var warningDialog = new InputDialog
+            {
+                Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive),
+                Title = "Warning",
+                Message = message,
+                IsWarning = true
+            };
+            warningDialog.ShowDialog();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
