@@ -8,8 +8,8 @@ using System.Windows.Input;
 using IndoorPlaygroundSafetyCheck.Commands;
 using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
+using IndoorPlaygroundSafetyCheck.Views;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
@@ -98,25 +98,37 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void AddUserExecute(object parameter)
         {
-            string inputRfidUid = Interaction.InputBox("Use Admin RFID Card please", "Admin RFID Verification", "");
-
-            if (string.IsNullOrWhiteSpace(inputRfidUid) || !IsAdminRfidUid(inputRfidUid))
+            var inputDialog = new InputDialog
             {
-                MessageBox.Show("Invalid or unauthorized RFID UID.");
-                return;
+                Title = "Admin RFID Verification"
+            };
+
+            if (inputDialog.ShowDialog() == true)
+            {
+                string inputRfidUid = inputDialog.RfidUid;
+
+                if (string.IsNullOrWhiteSpace(inputRfidUid) || !IsAdminRfidUid(inputRfidUid))
+                {
+                    MessageBox.Show("Invalid or unauthorized RFID UID.");
+                    return;
+                }
+
+                try
+                {
+                    _context.AddEmployee(FirstName, LastName ?? string.Empty, ConvertPosition(Position), RfidUid);
+                    _context.SaveChanges();
+
+                    LoadEmployees();
+                    MessageBox.Show($"User added successfully. New Employee: {FirstName} {LastName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-
-            try
+            else
             {
-                _context.AddEmployee(FirstName, LastName ?? string.Empty, ConvertPosition(Position), RfidUid);
-                _context.SaveChanges();
-
-                LoadEmployees();
-                MessageBox.Show($"User added successfully. New Employee: {FirstName} {LastName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Admin RFID verification canceled.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
