@@ -2,48 +2,34 @@
 using IndoorPlaygroundSafetyCheck.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace IndoorPlaygroundSafetyCheck.Views
 {
     public partial class StationQuestionView : UserControl
     {
-
-
-
         public StationQuestionView()
         {
             InitializeComponent();
-            this.DataContext = new StationQuestionViewModel();
+            var viewModel = (StationQuestionViewModel)DataContext;
+            viewModel.ShowMessageAction = ShowMessage;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as StationQuestionViewModel;
-            if (viewModel != null)
-            {
-                viewModel.SaveStationQuestion(QuestionTextInput.Text, StationDropDown.SelectedItem as Station);
-            }
+            var viewModel = (StationQuestionViewModel)DataContext;
+            var questionText = QuestionTextInput.Text;
+            var selectedStation = (Station)StationDropDown.SelectedItem;
+
+            viewModel.SaveStationQuestion(questionText, selectedStation);
+
+            // Clear input fields after saving
+            QuestionTextInput.Text = string.Empty;
+            StationDropDown.SelectedItem = null;
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void ShowMessage(string message)
         {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == "Enter Question Text")
-            {
-                textBox.Text = "";
-                textBox.Foreground = new SolidColorBrush(Colors.Black);
-            }
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "Enter Question Text";
-                textBox.Foreground = new SolidColorBrush(Colors.Gray);
-            }
+            MessageBox.Show(message);
         }
     }
 }
