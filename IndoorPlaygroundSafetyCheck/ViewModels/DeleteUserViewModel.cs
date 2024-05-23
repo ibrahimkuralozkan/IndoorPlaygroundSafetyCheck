@@ -1,6 +1,4 @@
-﻿// path: IndoorPlaygroundSafetyCheck/ViewModels/DeleteUserViewModel.cs
-
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -9,8 +7,8 @@ using IndoorPlaygroundSafetyCheck.Data;
 using IndoorPlaygroundSafetyCheck.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
+using IndoorPlaygroundSafetyCheck.Views;
 
 namespace IndoorPlaygroundSafetyCheck.ViewModels
 {
@@ -67,41 +65,54 @@ namespace IndoorPlaygroundSafetyCheck.ViewModels
 
         private void DeleteUserExecute(object parameter)
         {
-            string inputRfidUid = Interaction.InputBox("Use Admin RFID Card please", "Admin RFID Verification", "");
+            var inputDialog = new InputDialog
+            {
+                Message = "Use Admin RFID Card please",
+                IsWarning = false
+            };
 
-            if (string.IsNullOrWhiteSpace(inputRfidUid) || !IsAdminRfidUid(inputRfidUid))
+            if (inputDialog.ShowDialog() == true)
             {
-                WarningMessage = "Invalid or unauthorized RFID UID.";
-                return;
-            }
+                string inputRfidUid = inputDialog.RfidUid;
 
-            if (SelectedEmployee == null || string.IsNullOrWhiteSpace(SelectedEmployee.RfidUid))
-            {
-                WarningMessage = "No employee selected or invalid RFID UID.";
-                return;
-            }
-
-            try
-            {
-                _context.Employees.Remove(SelectedEmployee);
-                _context.SaveChanges();
-                Employees.Remove(SelectedEmployee);
-                WarningMessage = string.Empty; // Clear previous warnings if successful
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
-            {
-                if (sqlEx.Number == 547)
+                if (string.IsNullOrWhiteSpace(inputRfidUid) || !IsAdminRfidUid(inputRfidUid))
                 {
-                    WarningMessage = "Selected user has associated records. Deletion is not permitted.";
+                    WarningMessage = "Invalid or unauthorized RFID UID.";
+                    return;
                 }
-                else
+
+                if (SelectedEmployee == null || string.IsNullOrWhiteSpace(SelectedEmployee.RfidUid))
                 {
-                    throw;
+                    WarningMessage = "No employee selected or invalid RFID UID.";
+                    return;
+                }
+
+                try
+                {
+                    _context.Employees.Remove(SelectedEmployee);
+                    _context.SaveChanges();
+                    Employees.Remove(SelectedEmployee);
+                    WarningMessage = string.Empty; // Clear previous warnings if successful
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+                {
+                    if (sqlEx.Number == 547)
+                    {
+                        WarningMessage = "Selected user has associated records. Deletion is not permitted.";
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    WarningMessage = $"Unexpected error: {ex.Message}";
                 }
             }
-            catch (Exception ex)
+            else
             {
-                WarningMessage = $"Unexpected error: {ex.Message}";
+                WarningMessage = "Admin RFID verification was cancelled.";
             }
         }
 
