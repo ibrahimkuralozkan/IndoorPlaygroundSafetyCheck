@@ -20,7 +20,7 @@
         </Border>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <StackPanel Margin="20,0,150,20">
                     <TextBlock Text="Erläuterung:" Style="{StaticResource HeadingTextBlock}" Margin="0,0,0,10"/>
                     <TextBlock Text="Geben Sie hier Details oder Anweisungen an." Margin="0,0,0,10"/>
@@ -32,14 +32,14 @@
                     <ComboBox x:Name="StationComboBox" DisplayMemberPath="Name" ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}" Margin="0,0,0,10"/>
 
                     <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,20">
-                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Korrektes Setup-Bild hochladen" Click="UploadCorrectSetupImage_Click"/>
-                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Upload Common Errors Bild" Click="UploadCommonErrorsImage_Click"/>
-                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Upload Video" Click="UploadVideo_Click"/>
-                        <Button Width="200" Style="{StaticResource SmallButtonStyle}" Content="Save Training" Click="SaveTraining_Click"/>
+                        <Button Width="300" Style="{StaticResource SmallButtonStyle}" Content="Korrektes Setupbild hochladen" Click="UploadCorrectSetupImage_Click"/>
+                        <Button Width="300" Style="{StaticResource SmallButtonStyle}" Content="Häufigen Fehlern Bild Hochladen" Click="UploadCommonErrorsImage_Click"/>
+                        <Button Width="300" Style="{StaticResource SmallButtonStyle}" Content="Video hochladen" Click="UploadVideo_Click"/>
+                        <Button Width="300" Style="{StaticResource SmallButtonStyle}" Content="Training speichern" Click="SaveTraining_Click"/>
                     </WrapPanel>
                 </StackPanel>
 
-                <ItemsControl Background="#f0f0f0" ItemsSource="{Binding Trainings}">
+                <ItemsControl Background="#f0f0f0" ItemsSource="{Binding Trainings}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="1" BorderBrush="LightGray" Margin="0,0,0,10">
